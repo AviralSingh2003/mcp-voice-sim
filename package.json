@@ -1,0 +1,36 @@
+{
+  "name": "mcp-voice-sim",
+  "version": "0.1.0",
+  "description": "A framework-free browser kit for building simulated voice-assistant (e.g. Alexa+) experiences on MCP: Web Speech loop, MCP Apps host, Streamable HTTP client, and a live JSON-RPC inspector.",
+  "type": "module",
+  "main": "dist/mcp-voice-sim.js",
+  "module": "dist/mcp-voice-sim.js",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "node build.mjs",
+    "test": "vitest run",
+    "vendor": "node vendor.mjs"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "mcp-apps",
+    "alexa",
+    "voice",
+    "web-speech",
+    "simulator"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/client": "^2.3.1",
+    "@modelcontextprotocol/ext-apps": "^2.0.3"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2",
+    "jsdom": "^30.1.3",
+    "vitest": "^5.0.5"
+  }
+}

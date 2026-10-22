@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>mcp-voice-sim example</title>
+  <style>
+    body { font: 16px system-ui; margin: 24px; max-width: 900px; }
+    button { font-size: 16px; padding: 8px 14px; margin-right: 8px; }
+    #inspector { font: 13px ui-monospace, monospace; max-height: 320px; overflow: auto; background: #111; color: #ddd; padding: 8px; border-radius: 8px; }
+    #cards { margin: 16px 0; }
+  </style>
+</head>
+<body>
+  <h1>mcp-voice-sim example</h1>
+  <p>Connects to <code>http://127.0.0.1:3001/mcp</code> (run <code>examples/demo_server.py</code>).</p>
+  <button id="card">Call server_time (MCP App)</button>
+  <button id="speak">Speak the echo</button>
+  <div id="cards"></div>
+  <h2>JSON-RPC inspector</h2>
+  <div id="inspector"></div>
+  <script type="module">
+    import { FrameRecorder, connectMcp, createVoice, mountInspector, renderToolCard } from "./mcp-voice-sim.js";
+
+    const recorder = new FrameRecorder();
+    mountInspector(document.getElementById("inspector"), recorder);
+    const { client, callTool } = await connectMcp("http://127.0.0.1:3001/mcp", { recorder });
+    const { tools } = await client.listTools();
+    const voice = createVoice();
+
+    document.getElementById("card").onclick = async () => {
+      const tool = tools.find((t) => t.name === "server_time");
+      const result = await client.callTool({ name: "server_time", arguments: {} });
+      await renderToolCard({ container: document.getElementById("cards"), client,
+                             uri: tool._meta.ui.resourceUri, toolInput: {}, toolResult: result });
+    };
+    document.getElementById("speak").onclick = async () => {
+      voice.speak(await callTool("echo", { message: "Hello from your MCP server" }));
+    };
+  </script>
+</body>
+</html>
